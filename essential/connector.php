@@ -65,9 +65,9 @@ Version: 1.0.1.0
 		
 		private static function getPublic()
 		{
-			$database = "u282403210_vizsg";
+			$database = "VIZSGAGEN";
 			$adress = "localhost";
-			$username = "";
+			$username = "root";
 			$password = "";
 
 			$conn = new mysqli($adress, $username, $password, $database);
