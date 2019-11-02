@@ -79,9 +79,14 @@ Version: 1.0.0.0
 			$age = antiHackingSystem::testString($_POST['registerSystem_age']);
 			$sex = antiHackingSystem::testString($_POST['registerSystem_sex']);
 
-			$sql = "call doTheUserRegistration('$regCode', '$fullName', $age, '$scool', '$sex');";
+			$sql = "call doTheUserRegistration(?, ?, ?, ?, ?);";
 			//echo $sql;
-			$result = $this->conn_public->query($sql);
+			$stmt = $this->conn_public->prepare($sql);
+
+			$stmt->bind_param('ssiss', $regCode, $fullName, $age, $scool, $sex);
+
+			$stmt->execute();
+			$result = $stmt->get_result();
 			if (!$result)
 				{
 				    echo $sql;
@@ -173,11 +178,14 @@ Version: 1.0.0.0
 					$this->addError("hiányzó adminkód");
 					return false;
 				}
-			$sql = "call doTheUserLogin('$regCode', '$fullName');";
-			//echo $sql;
-			 
-			//echo $sql;
-			$result = $this->conn_public->query($sql);
+			$sql = "call doTheUserLogin(?, ?);";
+
+			$stmt = $this->conn_private->prepare($sql);
+
+			$stmt->bind_param('ss', $regCode, $fullName);
+
+			$stmt->execute();
+			$result = $stmt->get_result();
 			if(!$result)
 				{
 					$this->addError('Adatbázishiba');
